@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  appointment_backend:
+    build: .
+    container_name: appointment
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - appointment_db
+    networks:
+      - appointment
+
+  appointment_db:
+    image: mysql:8
+    #    platform: linux/x86_64 #for m1 chip macs
+    restart: always
+    environment:
+      MYSQL_DATABASE: appointments
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .dbdata:/var/lib/mysql
+    networks:
+      - appointment
+
+networks:
+  appointment:
+    name: appointment
